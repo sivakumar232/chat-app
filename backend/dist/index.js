@@ -1,15 +1,14 @@
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 const wss = new WebSocketServer({ port: 8080 });
-let userCount = 0;
+let allsockets = [];
 wss.on("connection", (socket) => {
-    userCount++;
-    console.log("user connected", userCount);
+    allsockets.push(socket);
     let socketId = "user" + Math.random();
     socket.onmessage = (e) => {
         console.log("message", e.data);
         setTimeout(() => {
-            wss.clients.forEach((client) => {
-                client.send(e.data + "from" + socketId);
+            allsockets.forEach((s) => {
+                s.send(e.data);
             });
         }, 1000);
     };
