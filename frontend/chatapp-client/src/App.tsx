@@ -10,18 +10,31 @@ function App() {
   const [username,setUsername]=useState("");
 
   useEffect(()=>{
-    const socket=connect();
+    const socket=connect(
+      (data)=> setMessages((prev)=>[...prev,data]),
+      (status)=> setIsconnected(status)
+    );
     return ()=>{
       socket.close();
     };  
   },[])
+
+ const handlejoin = (name: string) => {
+  setUsername(name);
+  sendMessage({ type: "join", username: name });
+  setIsjoined(true);
+};
+
+  const handlesend=(text:string)=>{
+    sendMessage({type:"message",message:text});
+  }
   
   return (
     <div className='bg-yellow-50 min-h-screen'>
       {
-        isConnected?<div className='p-4 postion-absolute text-green-600 max-w-[200px] top-2 left-2'>Connected</div>:<div className='p-3 text-red-600 max-w-[200px] postion-absolute '>Not Connected</div>
+        isConnected?<div className='p-4 postion-absolute text-green-600 max-w-[200px] top-2 left-2'> ● Connected</div>:<div className='p-3 text-red-600 max-w-[200px] postion-absolute '>○ Disconnected</div>
       }
-      {isJoined?<ChatScreen/>:<Join/>}
+      {isJoined?<ChatScreen messages={messages} onSend={handlesend}/>:<Join onJoin={handlejoin}/>}
     </div>
   )
 };

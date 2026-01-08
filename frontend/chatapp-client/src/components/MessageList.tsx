@@ -1,11 +1,7 @@
 import React from 'react'
 
-const MessageList = () => {
+const MessageList = ({ messages }: { messages: any[] }) => {
 
-    const messages = [
-    { id: 1, text: "Yo! Is this neo-brutalism?", sender: "Alice", self: false },
-    { id: 2, text: "Yes. High contrast and hard shadows only.", sender: "You", self: true },
-  ];
 
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto max-h-[500px]">
