@@ -18,6 +18,9 @@ function App() {
   
   return (
     <div className='bg-yellow-50 min-h-screen'>
+      {
+        isConnected?<div className='p-4 postion-absolute text-green-600 max-w-[200px] top-2 left-2'>Connected</div>:<div className='p-3 text-red-600 max-w-[200px] postion-absolute '>Not Connected</div>
+      }
       {isJoined?<ChatScreen/>:<Join/>}
     </div>
   )
