@@ -6,6 +6,8 @@ interface MessageListProps {
 }
 
 const MessageList = ({ messages }: MessageListProps) => {
+  console.log(messages);
+
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto max-h-[500px]">
       {messages.map((msg) => (

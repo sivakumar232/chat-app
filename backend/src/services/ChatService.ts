@@ -46,7 +46,7 @@ export class ChatService {
     };
 
     userRepo.getUsersByRoom(roomId).forEach(user => {
-      if (user.socket.readyState === WebSocket.OPEN) {
+      if (user.socket.readyState === WebSocket.OPEN && user.socket !== socket) {
         user.socket.send(JSON.stringify(message));
       }
     });

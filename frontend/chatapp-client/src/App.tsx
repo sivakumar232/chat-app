@@ -29,6 +29,15 @@ function App() {
 };
 
   const handlesend=(text:string)=>{
+    if(!text) return;
+    const myMessage =     {
+      id: crypto.randomUUID(),
+      sender: username,
+      text,
+      self: true
+    };
+    setMessages(prev => [...prev, myMessage]);
+
     sendMessage({event:"room:message",payload:{roomId:currentroom,text}});
   }
 

@@ -12,9 +12,20 @@ export const connect = (onMessage: (data: any) => void, onStatusChange: (open: b
      
 
     socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        onMessage(data);
-    };
+    const serverEvent = JSON.parse(event.data);
+    
+    if (serverEvent.event === "room:message") {
+    const { id, username, text } = serverEvent.data;
+
+    onMessage({
+      id,
+      sender: username,
+      text,
+      self: false
+    });
+  }
+};
+
 
     socket.onerror = (error) => {
         console.error("WebSocket Error:", error);
