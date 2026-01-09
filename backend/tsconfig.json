@@ -1,39 +1,19 @@
 {
   "compilerOptions": {
-    /* Target and Environment */
     "target": "ES2022",
-    "lib": ["ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler", // Allows importing without .js extensions
-    "types": ["node"],
-    
-    /* File Layout */
+    "module": "CommonJS",
+
     "rootDir": "./src",
     "outDir": "./dist",
-    "baseUrl": ".",
 
-    /* Modules and Interop */
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    
-    /* Type Checking */
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "skipLibCheck": true,
+    "esModuleInterop": true,
 
-    /* Emit Logic */
-    "noEmit": false, // Change to true if using a runner like 'tsx' exclusively
+    "types": ["node"],
+
     "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    
-    /* Style/Cleanliness */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

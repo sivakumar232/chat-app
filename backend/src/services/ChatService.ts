@@ -1,34 +1,54 @@
 import { WebSocket } from "ws";
-import crypto from "crypto";
+import { randomUUID } from "crypto";
 import { UserRepository } from "../repositories/UserRepository";
+import { ServerEvent } from "../types";
 
 const userRepo = UserRepository.getInstance();
 
 export class ChatService {
-    public static handleJoin(socket: WebSocket, username: string) {
-        const newUser = {
-            userid: crypto.randomUUID(),
-            socket,
-            username
-        };
-        userRepo.save(newUser);
-        console.log("Users updated:", userRepo.getAll().length);
+  static handleJoin(
+    socket: WebSocket,
+    roomId: string,
+    username: string
+  ) {
+    let user = userRepo.findBySocket(socket);
+
+    if (!user) {
+      user = {
+        userId: randomUUID(),
+        socket,
+        username,
+        rooms: new Set()
+      };
+      userRepo.save(user);
     }
 
-    public static broadcastMessage(socket: WebSocket, content: string) {
-        const sender = userRepo.findBySocket(socket);
-        if (!sender) return;
+    user.rooms.add(roomId);
+  }
 
-        const payload = JSON.stringify({
-            type: "message",
-            message: content,
-            username: sender.username
-        });
+  static broadcastRoomMessage(
+    socket: WebSocket,
+    roomId: string,
+    text: string
+  ) {
+    const sender = userRepo.findBySocket(socket);
+    if (!sender) return;
 
-        userRepo.getAll().forEach(client => {
-            if (client.socket.readyState === WebSocket.OPEN) {
-                client.socket.send(payload);
-            }
-        });
-    }
+    const message: ServerEvent = {
+      event: "room:message",
+      data: {
+        id: randomUUID(),
+        roomId,
+        username: sender.username,
+        text,
+        timestamp: Date.now()
+      }
+    };
+
+    userRepo.getUsersByRoom(roomId).forEach(user => {
+      if (user.socket.readyState === WebSocket.OPEN) {
+        user.socket.send(JSON.stringify(message));
+      }
+    });
+  }
 }

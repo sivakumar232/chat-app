@@ -1,20 +1,38 @@
 import { WebSocket } from "ws";
 import { ChatService } from "../services/ChatService";
-import { ChatMessage } from "../types";
+import { ClientEvent } from "../types";
 
-export const chatController = (socket: WebSocket, message: string) => {
-    try {
-        const data: ChatMessage = JSON.parse(message);
+export const chatController = (socket: WebSocket, raw: string) => {
+  try {
+    const data: ClientEvent = JSON.parse(raw);
 
-        if (data.type === "join" && data.username) {
-            ChatService.handleJoin(socket, data.username);
-        }
+// {
+//   "event": "room:join",
+//   "payload": {
+//     "roomId": "global",
+//     "username": "siva"
+//   }
+// }
 
-        if (data.type === "message" && data.message) {
-            ChatService.broadcastMessage(socket, data.message);
-        }
-    } catch (e) {
-        console.error("Payload error:", e);
-        socket.send(JSON.stringify({ type: "error", message: "Invalid format" }));
+    switch (data.event) {
+      case "room:join": {
+        const { roomId, username } = data.payload;
+        ChatService.handleJoin(socket, roomId, username);
+        break;
+      }
+
+      case "room:message": {
+        const { roomId, text } = data.payload;
+        ChatService.broadcastRoomMessage(socket, roomId, text);
+        break;
+      }
     }
+  } catch (err) {
+    socket.send(
+      JSON.stringify({
+        event: "system:error",
+        message: "Invalid payload format"
+      })
+    );
+  }
 };

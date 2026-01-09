@@ -2,27 +2,33 @@ import { WebSocket } from "ws";
 import { UserSocket } from "../types";
 
 export class UserRepository {
-    private static instance: UserRepository;
-    private userconnections: UserSocket[] = [];
+  private static instance: UserRepository;
+  private users = new Map<WebSocket, UserSocket>();
 
-    public static getInstance() {
-        if (!UserRepository.instance) UserRepository.instance = new UserRepository();
-        return UserRepository.instance;
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new UserRepository();
     }
+    return this.instance;
+  }
 
-    public save(user: UserSocket) {
-        this.userconnections.push(user);
-    }
+  save(user: UserSocket) {
+    this.users.set(user.socket, user);
+  }
 
-    public findBySocket(socket: WebSocket) {
-        return this.userconnections.find(u => u.socket === socket);
-    }
+  findBySocket(socket: WebSocket) {
+    return this.users.get(socket);
+  }
 
-    public getAll() {
-        return this.userconnections;
-    }
+  getAll() {
+    return Array.from(this.users.values());
+  }
 
-    public remove(socket: WebSocket) {
-        this.userconnections = this.userconnections.filter(u => u.socket !== socket);
-    }
+  remove(socket: WebSocket) {
+    this.users.delete(socket);
+  }
+
+  getUsersByRoom(roomId: string) {
+    return this.getAll().filter(u => u.rooms.has(roomId));
+  }
 }
