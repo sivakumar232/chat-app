@@ -1,3 +1,4 @@
+import type { ClientEvent } from '../types/type';
 
 let socket: WebSocket | null = null;
 
@@ -21,7 +22,7 @@ export const connect = (onMessage: (data: any) => void, onStatusChange: (open: b
 
     return socket;
 };
-export const sendMessage = (data: any) => {
+export const sendMessage = (data: ClientEvent) => {
     if (socket?.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify(data));
     } else {

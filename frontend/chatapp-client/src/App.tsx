@@ -10,7 +10,7 @@ function App() {
   const [message,setMessage]=useState("");
   const [messages,setMessages]=useState<string[]>([]);
   const [username,setUsername]=useState("");
-
+  const [currentroom,setcurrentRoom]=useState("global");
   useEffect(()=>{
     const socket=connect(
       (data)=> setMessages((prev)=>[...prev,data]),
@@ -21,16 +21,17 @@ function App() {
     };  
   },[])
 
- const handlejoin = (name: string) => {
+ const handlejoin = (name: string,room: string) => {
   setUsername(name);
-  sendMessage({ type: "join", username: name });
+  sendMessage({event:"room:join",payload:{roomId:room,username:name}});
+  setcurrentRoom(room);
   setIsjoined(true);
 };
 
   const handlesend=(text:string)=>{
-    sendMessage({type:"message",message:text});
+    sendMessage({event:"room:message",payload:{roomId:currentroom,text}});
   }
-  
+
   return (
     <div className='bg-yellow-50 min-h-screen'>
       {
