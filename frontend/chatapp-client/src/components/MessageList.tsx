@@ -1,8 +1,11 @@
 import React from 'react'
+import type { ChatMessage } from '../types/type'
 
-const MessageList = ({ messages }: { messages: any[] }) => {
+interface MessageListProps {
+  messages: ChatMessage[];
+}
 
-
+const MessageList = ({ messages }: MessageListProps) => {
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto max-h-[500px]">
       {messages.map((msg) => (
@@ -14,7 +17,9 @@ const MessageList = ({ messages }: { messages: any[] }) => {
               : "self-start bg-white text-black"
           }`}
         >
-          <div className="text-xs uppercase mb-1 underline">{msg.sender}</div>
+          <div className="text-xs uppercase mb-1 underline">
+            {msg.sender}
+          </div>
           <p>{msg.text}</p>
         </div>
       ))}

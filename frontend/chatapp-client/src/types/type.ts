@@ -8,7 +8,12 @@ export interface UserSocket {
   username: string;
   rooms: Set<string>;
 }
-
+export interface ChatMessage {
+  id:string,
+  sender:string,
+  text:string,
+  self:boolean
+}
 /* ------------------ Client → Server ------------------ */
 
 export type ClientEvent =

@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import MessageList from './MessageList';
+import type { ChatMessage } from '../types/type';
 
-interface ChatProps {messages:any[],onSend:(text:string)=>void}
+
+interface ChatProps {messages:ChatMessage[],onSend:(text:string)=>void}
 const Chat = ({ messages, onSend }: ChatProps) => {
   const [input, setInput] = useState("");
   const handlesend =()=>{

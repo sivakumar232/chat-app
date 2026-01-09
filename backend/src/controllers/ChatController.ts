@@ -3,9 +3,7 @@ import { ChatService } from "../services/ChatService";
 import { ClientEvent } from "../types";
 
 export const chatController = (socket: WebSocket, raw: string) => {
-  try {
-    const data: ClientEvent = JSON.parse(raw);
-
+  // joining the room
 // {
 //   "event": "room:join",
 //   "payload": {
@@ -14,6 +12,19 @@ export const chatController = (socket: WebSocket, raw: string) => {
 //   }
 // }
 
+//sending meesage
+// {
+//   "event": "room:message",
+//   "payload": {
+//     "roomId": "global",
+//     "text": "hello"
+//   }
+// }
+
+
+
+  try {
+    const data: ClientEvent = JSON.parse(raw);
     switch (data.event) {
       case "room:join": {
         const { roomId, username } = data.payload;

@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import ChatScreen from './components/ChatScreen'
 import { Join } from './components/JoinScreen';
 import {connect,sendMessage} from "./services/socketService"
-
+import type { ChatMessage } from './types/type';
 
 function App() {
   const [isConnected,setIsconnected]=useState(false);
   const [isJoined,setIsjoined]=useState(false);
   const [message,setMessage]=useState("");
-  const [messages,setMessages]=useState<string[]>([]);
+  const [messages,setMessages]=useState<ChatMessage[]>([]);
   const [username,setUsername]=useState("");
   const [currentroom,setcurrentRoom]=useState("global");
   useEffect(()=>{
