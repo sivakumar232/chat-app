@@ -8,7 +8,8 @@ export const connect = (onMessage: (data: any) => void, onStatusChange: (open: b
     socket = new WebSocket("ws://localhost:8080");
     socket.onopen = () => onStatusChange(true);
     socket.onclose = () => onStatusChange(false);
-    
+     
+
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         onMessage(data);
